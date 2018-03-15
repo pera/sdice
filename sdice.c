@@ -7,13 +7,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#define WORDS 1024
-#define BITMASK (WORDS - 1)
+/* Size of the dictionary */
+#define DSIZE 1024
+#define BITMASK (DSIZE - 1)
 
-#define MAXENT 10
-#define BSIZE (MAXENT * 2)
+/* Maximum number of words */
+#define MAXPHRASE 100
 
-char *words[WORDS] = {
+/* Size of the read buffer */
+#define BSIZE (MAXPHRASE * 2)
+
+char *words[DSIZE] = {
 	"acid", "acorn", "acre", "acts", "afar", "affix", "aged", "agent",
 	"agile", "aging", "agony", "ahead", "aide", "ajar", "alarm", "alias",
 	"alibi", "alien", "alike", "aloe", "aloft", "aloha", "alone", "alpha",
@@ -144,17 +148,28 @@ char *words[WORDS] = {
 	"yummy", "zebra", "zero", "zesty", "zeta", "zippy", "zone", "zoom"
 };
 
-int main() {
+int main(int argc, char **argv) {
 	int fd;
 	uint8_t buf[BSIZE];
+	unsigned short len;
+
+	if (argc == 1) {
+		len = 8;
+	} else {
+		char *endptr;
+		long int n = strtol(argv[1], &endptr, 10);
+		if (!*endptr && n > 0 && n <= MAXPHRASE)
+			len = n;
+		else
+			return EXIT_FAILURE;
+	}
 
 	fd = open("/dev/urandom", O_RDONLY);
-	if ((fd == -1) || (read(fd, buf, BSIZE) == -1))
+	if ((fd == -1) || (read(fd, buf, 2*len) == -1))
 		return EXIT_FAILURE;
 
-	for (size_t i = 0; i<BSIZE; i+=2)
+	for (size_t i = 0; i<2*len; i+=2)
 		printf("%s ", words[*(uint16_t*)&buf[i] & BITMASK]);
-		// printf("%s ", words[((buf[i+1]<<8) | buf[i]) & BITMASK]);
 
 	putchar(0x0A);
 

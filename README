@@ -1,1 +1,6 @@
-A simple diceware implementation for Unix-like systems based on EFF's Short Wordlist #1 (https://www.eff.org/dice).
+A simple diceware implementation for Unix-like systems based on a slightly modified version of EFF's Short Wordlist #1 (https://www.eff.org/dice): this dictionary contains 1024 words between 4 and 5 characters, providing exactly 10 bits of entropy per word.
+
+The default optimization level of GCC should produce the expected binary.
+
+Please always review the code and the assembler output of your compiler, and most important, do not use this program if you don't understand its possible attack vectors; using a real dice is usually safer :)
+
