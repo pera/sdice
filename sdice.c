@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
 	} else {
 		char *endptr;
 		long int n = strtol(argv[1], &endptr, 10);
-		if (!*endptr && n > 0 && n <= MAXPHRASE)
+		if ((!*endptr) && (n > 0) && (n <= MAXPHRASE))
 			len = n;
 		else
 			return EXIT_FAILURE;
@@ -168,7 +168,7 @@ int main(int argc, char **argv) {
 	if ((fd == -1) || (read(fd, buf, 2*len) == -1))
 		return EXIT_FAILURE;
 
-	for (size_t i = 0; i<2*len; i+=2)
+	for (size_t i = 0; i < 2*len; i += 2)
 		printf("%s ", words[*(uint16_t*)&buf[i] & BITMASK]);
 
 	putchar(0x0A);
