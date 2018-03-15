@@ -158,11 +158,10 @@ const char *words[DSIZE] = {
 int main(int argc, char **argv) {
 	int fd;
 	uint8_t buf[BSIZE];
-	unsigned short int len;
+	unsigned short int len = 8;
 
-	if (argc == 1) {
-		len = 8;
-	} else {
+	/* be aware that your shell may store on disk the passed length */
+	if (argc > 1) {
 		char *endptr;
 		long int n = strtol(argv[1], &endptr, 10);
 		if ((!*endptr) && (n > 0) && (n <= MAXPHRASE))
@@ -172,7 +171,7 @@ int main(int argc, char **argv) {
 	}
 
 	fd = open("/dev/urandom", O_RDONLY);
-	if ((fd == -1) || (read(fd, buf, 2*len) == -1))
+	if ((fd == -1) || (read(fd, buf, 2*len) == -1) || (close(fd) == -1))
 		return EXIT_FAILURE;
 
 	for (size_t i = 0; i < 2*len; i += 2)
@@ -180,7 +179,7 @@ int main(int argc, char **argv) {
 
 	putchar(0x0A);
 
-	close(fd);
+	/* check that your compiler don't optimize the zeroing away */
 	memset(buf, 0, sizeof(buf));
 
 	return EXIT_SUCCESS;
