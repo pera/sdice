@@ -1,3 +1,10 @@
+/*
+ * sdice: a simple diceware implementation
+ *
+ * gcc -Wall -std=c99 -O0 sdice.c -o sdice
+ *
+ */
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +24,7 @@
 /* Size of the read buffer */
 #define BSIZE (MAXPHRASE * 2)
 
-char *words[DSIZE] = {
+const char *words[DSIZE] = {
 	"acid", "acorn", "acre", "acts", "afar", "affix", "aged", "agent",
 	"agile", "aging", "agony", "ahead", "aide", "ajar", "alarm", "alias",
 	"alibi", "alien", "alike", "aloe", "aloft", "aloha", "alone", "alpha",
@@ -151,7 +158,7 @@ char *words[DSIZE] = {
 int main(int argc, char **argv) {
 	int fd;
 	uint8_t buf[BSIZE];
-	unsigned short len;
+	unsigned short int len;
 
 	if (argc == 1) {
 		len = 8;
