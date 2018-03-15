@@ -1,6 +1,7 @@
 /*
  * sdice: a simple diceware implementation
  *
+ * gcc -Wall -std=c99 -O0 -S -fverbose-asm sdice.c
  * gcc -Wall -std=c99 -O0 sdice.c -o sdice
  *
  */
