@@ -42,7 +42,13 @@ int main(int argc, char **argv) {
 	}
 
 	fd = open("/dev/random", O_RDONLY);
-	if ((fd == -1) || (read(fd, buf, 2*len) == -1) || (close(fd) == -1))
+
+	if (fd == -1)
+		return EXIT_FAILURE;
+
+	for (size_t i = 2*len; i != 0; i -= read(fd, buf+(2*len-i), i));
+
+	if (close(fd) == -1)
 		return EXIT_FAILURE;
 
 	for (size_t i = 0; i < 2*len; i += 2)
